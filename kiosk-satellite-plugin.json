@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "apiVersion": 1,
+  "id": "reolink-doorbell",
+  "name": "Reolink Doorbell",
+  "version": "1.0.0",
+  "minAndroidSdk": 26,
+  "entryClass": "net.reolinkdoorbell.ReolinkPlugin",
+  "description": "Live Reolink doorbell video with two-way audio via go2rtc/RTSP. Configure the stream URL from your Home Assistant go2rtc instance. No cloud service required.",
+  "author": "",
+  "icon": "icon.png",
+  "license": "Apache-2.0",
+  "capabilities": ["overlay"],
+  "commands": [
+    {"id": "show", "title": "Open Reolink doorbell"}
+  ],
+  "settings": [
+    {
+      "key": "streamUrl",
+      "type": "string",
+      "title": "RTSP stream URL",
+      "default": "",
+      "group": "Connection",
+      "description": "go2rtc RTSP URL for the doorbell stream, e.g. rtsp://192.168.1.10:8554/reolink_doorbell. Use rtsps:// for TLS."
+    },
+    {
+      "key": "sizing",
+      "type": "select",
+      "title": "Image sizing",
+      "default": "Stretch",
+      "options": ["Fit", "Fill", "Stretch"],
+      "group": "Display",
+      "description": "Fit shows the whole picture; Fill crops to the screen; Stretch fills without preserving proportions."
+    },
+    {
+      "key": "viewport",
+      "type": "select",
+      "title": "Viewport aspect",
+      "default": "Auto",
+      "options": ["Auto", "4:3", "16:9", "16:10"],
+      "group": "Display",
+      "description": "Auto uses the full screen. Other values constrain the viewing area."
+    },
+    {
+      "key": "horizontal",
+      "type": "number",
+      "title": "Horizontal crop position",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "group": "Display",
+      "visibleWhen": {"key": "sizing", "equals": "Fill"}
+    },
+    {
+      "key": "vertical",
+      "type": "number",
+      "title": "Vertical crop position",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "group": "Display",
+      "visibleWhen": {"key": "sizing", "equals": "Fill"}
+    },
+    {
+      "key": "controls",
+      "type": "select",
+      "title": "Control placement",
+      "default": "Top",
+      "options": ["Top", "Bottom", "Left", "Right"],
+      "group": "Display"
+    },
+    {
+      "key": "autoClose",
+      "type": "select",
+      "title": "Auto-close after inactivity",
+      "default": "1 minute",
+      "options": ["Off", "30 seconds", "1 minute", "2 minutes", "5 minutes", "10 minutes"],
+      "group": "Display",
+      "description": "Controls reset the timer. Talk suspends auto-close. Off keeps the viewer open."
+    },
+    {
+      "key": "controlSize",
+      "type": "number",
+      "title": "Control size (dp)",
+      "default": 56,
+      "min": 48,
+      "max": 96,
+      "step": 4,
+      "group": "Display"
+    },
+    {
+      "key": "startMuted",
+      "type": "boolean",
+      "title": "Start with listening muted",
+      "default": true,
+      "group": "Audio"
+    },
+    {
+      "key": "muteWhileTalking",
+      "type": "boolean",
+      "title": "Mute listening while talking",
+      "default": true,
+      "group": "Audio"
+    },
+    {
+      "key": "talkEnabled",
+      "type": "boolean",
+      "title": "Enable two-way audio",
+      "default": false,
+      "group": "Audio",
+      "description": "Tap the microphone to start/stop. Requires go2rtc RTSP backchannel support (configure reolink source in go2rtc.yaml). Green is off; red is active."
+    },
+    {
+      "key": "talkLimit",
+      "type": "number",
+      "title": "Microphone auto-off (seconds)",
+      "default": 20,
+      "min": 5,
+      "max": 60,
+      "step": 5,
+      "group": "Audio",
+      "description": "Maximum talk duration. Transmission stops automatically after this time."
+    }
+  ]
+}

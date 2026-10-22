@@ -1,0 +1,54 @@
+name: Release
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build (e.g. 1.0.0)'
+        required: false
+        default: '0.0.0-dev'
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set version
+        id: version
+        run: |
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=${{ github.event.inputs.version || '0.0.0-dev' }}" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+      - name: Install Android build tools
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Test
+        run: python3 tools/test.py
+      - name: Build
+        run: python3 tools/build.py --android-platform 35 --version "${{ steps.version.outputs.version }}"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: reolink-doorbell-plugin
+          path: |
+            dist/*.zip
+            dist/*.zip.sha256
+            dist/kiosk-satellite-plugin.json
+      - name: Attach plugin assets to the release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "$GITHUB_REF_NAME" \
+            dist/*.zip \
+            dist/*.zip.sha256 \
+            dist/kiosk-satellite-plugin.json --clobber

@@ -7,7 +7,7 @@
   "minAndroidSdk": 26,
   "entryClass": "net.reolinkdoorbell.ReolinkPlugin",
   "description": "Live Reolink doorbell video with two-way audio via go2rtc/RTSP. Configure the stream URL from your Home Assistant go2rtc instance. No cloud service required.",
-  "author": "",
+  "author": "Lukas Koeni",
   "icon": "icon.png",
   "license": "Apache-2.0",
   "capabilities": ["overlay"],

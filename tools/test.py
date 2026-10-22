@@ -30,7 +30,7 @@ assert [command['id'] for command in manifest['commands']] == ['show']
 assert manifest['minAndroidSdk'] == 26, 'AudioFocusRequest requires Android 8/API 26'
 viewer_source = (ROOT / 'src/net/reolinkdoorbell/CameraView.java').read_text()
 assert 'button("Close")' in viewer_source and 'button("Back")' not in viewer_source
-assert 'theme.icon(name' in viewer_source and 'colorButton(talk, highlighted)' in viewer_source
+assert 'theme.icon(name' in viewer_source and 'updateTalkButton()' in viewer_source
 runtime_sources = '\n'.join(p.read_text() for p in (ROOT / 'src').rglob('*.java'))
 assert not any(s in runtime_sources for s in ('System.out.', 'System.err.', 'printStackTrace(', 'android.util.Log.'))
 print('PASS: manifest defaults, numeric ranges/steps and secret defaults')
